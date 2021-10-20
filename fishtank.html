@@ -14,10 +14,43 @@
         var app = new PIXI.Application({
             width:800,
             height:600,
-            backgroundColor: black
+            backgroundColor: black,
 
         });
-        let fish1 = PIXI.Sprite.from(img/fish1.jpg);
+        document.body.appendChild(app.view);
+
+        let fish1 = PIXI.Sprite.from("img/fish1.jpg");
+        fish1.x = -130;
+        fish1.y = 0;
+        fish1.angle = 0;
+        fish1.tint = 0xFFFFFF;
+        fish1.anchor.set(.5);
+
+        app.stage.addChild(fish1);
+
+        let fish2 = PIXI.Sprite.from("img/fish2.jpg");
+        fish1.anchor.set(.5);
+        fish2.scale.set(.3);
+        fish2.x = 20;
+        fish2.y = 0;
+
+        app.stage.addChild(fish2);
+
+        let fish3 = PIXI.Sprite.from("img/fish3.jpg");
+        fish1.anchor.set(.5);
+        fish2.scale.set(.3);
+        fish2.x = 20;
+        fish2.y = 0;
+
+        app.stage.addChild(fish3);
+
+        let fish4 = PIXI.Sprite.from("img/fish4.jpg");
+        fish1.anchor.set(.5);
+        fish2.scale.set(.3);
+        fish2.x = 20;
+        fish2.y = 0;
+
+        app.stage.addChild(fish4);
 
 
 
