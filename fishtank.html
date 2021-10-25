@@ -52,6 +52,34 @@
 
         app.stage.addChild(fish4);
 
+        var my_container = new PIXI.Container();
+        my_container.addChild(fish1);
+        my_container.addChild(fish2);
+        my_container.x = 320;
+        my_container.y = 240;
+
+        app.stage.addChild(my_container);
+
+        function animationLoop() {
+
+        let time = Date.now();
+
+        let wobble1 = Math.sin(time/1000)*20;
+        let wobble2 = Math.sin(time/700)*10;
+        let wobble3 = Math.sin(time/700)*20;
+        let wobble4 = Math.sin(time/700)*15;
+
+
+        fish1.y = wobble1;
+        fish2.y = wobble2;
+        fish2.y = wobble3;
+        fish2.y = wobble4;
+
+        setTimeout(animationLoop, 1000/30);
+    }
+    animationLoop();
+
+
 
 
     </script>
