@@ -57,6 +57,16 @@
     
             app.stage.addChild(coral3);
 
+            let anemone = PIXI.Sprite.from("img/anemone.png");
+            anemone.width = 240;
+            anemone.height = 200;
+            anemone.x = 650;
+            anemone.y = 500;
+            anemone.tint = 0xFFFFFF;
+            anemone.anchor.set(.5);
+
+            app.stage.addChild(anemone);
+
     
             let fish1 = PIXI.Sprite.from("img/fish1.png");
             fish1.width = 100;
