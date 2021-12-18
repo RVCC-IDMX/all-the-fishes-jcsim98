@@ -17,7 +17,7 @@
                 width:800,
                 height:600,
                 backgroundColor: 0x000000,
-    
+
             });
 
             var stage = app.stage;
@@ -134,10 +134,126 @@
     
             setTimeout(animationLoop, 1000/30);
         }
-        animationLoop();
+            animationLoop();
+
+            let theButton = new PIXI.Container();
+       
+            theButton.interactive = true;
+
+            let buttonLook = new PIXI.Graphics();
+            buttonLook.beginFill(0xFFFF00);
+            buttonLook.drawRect(50,25,50,50);
+            theButton.addChild(buttonLook);
+
+            theButton.look = buttonLook;
+
+            let buttonText = new PIXI.Text;
+            buttonText.anchor.set(.5,.5);
+            buttonText.x = 30;
+            buttonText.y = 30;
+            theButton.addChild(buttonText);
+            theButton.text = buttonText;
+
+            theButton.on("click", function (f){
+            let randomColor = Math.floor(Math.random()*0xFFFFFF);
+            fish1.tint= randomColor;
+            });
+
+            app.stage.addChild(theButton);
+         
+            makeButton();
+
+           function makeSlider() {
+           let slideContain = new PIXI.Container();
+           slideContain.interactive = true;
+           slideContain.value = 0;
     
+           let track = new PIXI.Graphics();
+           track.beginFill(0xFF00FF);
+           track.drawRect(250,35,275,30);
+
+           slideContain.addChild(track);
     
+           let slide = new PIXI.Graphics();
     
+           slide.interactive = true;
+           slide.beginFill(0xFF00FF);
+           slide.drawRect(250,25,25,50);
+           slideContain.addChild(slide);
+   
+           slide.dragging = false;
+           slide.on("pointerdown", function (e){
+           slide.dragging = true;
+           console.log('click');
+           
+           });
+   
+           slide.on("pointermove", function (e) {
+           if(slide.dragging){
+           let newX = e.data.global.x - slideContain.getGlobalPosition().x;
+           let newY = e.data.global.y - slideContain.getGlobalPosition().y;
+            
+           if (newX > track.width) newX = track.width;
+           if (newX < 0 )newX = 0;
+
+           slideContain.value = newX/track.width;
+           slide.x = newX;
+           fish2.scale.set(newX/1000);
+             
+           }
+           
+           });
+          
+           slide.on("pointerup", function (e) {
+           slide.dragging = false;
+           
+           });
+            
+           slide.on("pointerupoutside", function (e){
+           slide.dragging = false;
+           
+           });
+            
+           return slideContain;
+            
+           };
+            
+           let slideContain = makeSlider();
+            
+           app.stage.addChild(slideContain);
+
+           function makeButton(){
+    
+           fish3.interactive = true;
+           fish3.dragging = false;
+           fish3.on("pointerdown", function (e){
+           fish3.dragging = true;
+           console.log('click');
+
+           })
+
+           fish3.on("pointermove", function (e) {
+    
+           if(fish3.dragging){
+           console.log("dragging");
+           fish3.x = e.data.global.x - fish3.width*3;
+           fish3.y = e.data.global.y - fish3.height*3;
+    
+           };
+    
+           })
+    
+           fish3.on("pointerup", function (e) {
+           fish3.dragging = false;
+    
+           })
+    
+           fish3.on("pointerupoutside", function (e){
+           fish3.dragging = false;
+    
+           })
+
+       }
     
         </script><canvas width="800" height="600" style="touch-action: none; cursor: inherit;"></canvas>
     
