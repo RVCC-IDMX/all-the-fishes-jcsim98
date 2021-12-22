@@ -71,7 +71,7 @@
             let fish1 = PIXI.Sprite.from("img/fish1.png");
             fish1.width = 150;
             fish1.height = 130;
-            fish1.x = 130;
+            fish1.x = 300;
             fish1.y = 300;
             fish1.angle = 0;
             fish1.tint = 0xFFFFFF;
@@ -84,8 +84,8 @@
             fish2.height = 80;
             fish2.anchor.set(.5);
             fish2.scale.set(.3);
-            fish2.x = 200;
-            fish2.y = 50;
+            fish2.x = 10;
+            fish2.y = 10;
     
             app.stage.addChild(fish2);
     
@@ -102,7 +102,7 @@
             let fish4 = PIXI.Sprite.from("img/fish4.png");
             fish4.width = 60;
             fish4.height = 50;
-            fish4.x = 70;
+            fish4.x = 150;
             fish4.y = 400;
     
             app.stage.addChild(fish4);
@@ -129,12 +129,16 @@
     
             fish1.y = wobble1;
             fish2.y = wobble2;
-            fish3.y = wobble3;
-            fish4.y = wobble4;
+           // fish3.y = wobble3;
+          //  fish4.y = wobble4;
     
             setTimeout(animationLoop, 1000/30);
         }
             animationLoop();
+
+            // 2
+
+            
 
             let theButton = new PIXI.Container();
        
@@ -254,6 +258,162 @@
            })
 
        }
+    
+
+       // 3
+
+       requestAnimationFrame(animationLoop);
+        animationLoop();
+
+        let Animate = {};
+
+        Animate.to = function (obj, end) {
+            return new Promise((resolve, reject) => {
+
+                var start = {
+                    x: obj.x,
+                    y: obj.y
+                }
+
+                if (end.duration == undefined) end.duration = 0;
+                if (end.easing == undefined) end.easing = Animate.linear;
+
+                var startTime = Date.now();
+
+                function loop() {
+
+                    let ticker = Date.now() - startTime;
+                    let delta = ticker / end.duration;
+
+                    if (delta >= 1) {
+                        obj.x = end.x;
+                        obj.y = end.y;
+                        console.log("fin");
+                        
+                        resolve();
+                        return;
+                    }
+
+                    let lerp = (a, b, n) => {
+                        return (1 - n) * a + n * b;
+                    }
+
+                    obj.x = lerp(start.x, end.x, delta);
+
+                    obj.y = lerp(start.y, end.y, delta);
+
+                    obj.animationID = requestAnimationFrame(loop);
+                }
+
+                cancelAnimationFrame(obj.animationID);
+
+                loop();
+            });
+
+        };
+
+        Animate.stop = function (obj) {
+            cancelAnimationFrame(obj.animationID);
+        }
+
+        Animate.linear = x => x;
+        Animate.easeIn = x => x * x;
+        Animate.easeOut = x => 1 - (1 - x) * (1 - x);
+        Animate.easeInOut = x => x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+
+        function pause(ms) {
+        return new Promise((resolve, reject) => {
+        setTimeout(resolve, ms);
+
+        });
+
+        }
+
+        async function idleSwim1() {
+        await Animate.to(fish4, {
+        x: 250, y: 260,
+        duration: 2500,
+        easing:Animate.easeInOut
+
+         });
+
+        fish4.rotation = 1.2;
+        await Animate.to(fish4, {
+        x: 260, y: 50,
+        duration: 2500,
+        easing: Animate.easeInOut
+
+        });
+
+        idleSwim1();
+        fish4.rotation = 0;
+
+        }
+
+        idleSwim1();
+
+        async function idleSwim2() {
+        await Animate.to(fish3, {
+        x: 70, y: 10,
+        duration: 3000,
+        easing: Animate.easeInOut
+
+        });
+
+        fish3.tint = (Math.floor(Math.random() * 0xFFFFFF));
+        await Animate.to(fish3, {
+        x: 10, y: 30,
+        duration: 2000,
+        easing: Animate.easeInOut
+
+        });
+
+        idleSwim2();
+
+        }
+
+        idleSwim2();
+
+        
+        fish3.interactive = true;
+        fish3.on('click', e => {
+        async function go_up() {
+        await Animate.to(fish3, {
+        x: 20, y: 80,
+        duration: 1000,
+        easing: Animate.easeInOut
+
+        });
+
+        await pause(2000);
+        go_up();
+        idleSwim2();
+        fish3.rotation = 0;
+        };
+
+        go_up();
+
+        })
+        
+        async function fish3Idle() {
+        await Animate.to(fish4, {
+        x: -30,
+        y: 10,
+        duration: 1000,
+        easing: Animate.easeInOut
+
+         })
+        await Animate.to(fish4, {
+        x: -50,
+        y: 60,
+        duration: 1000,
+        easing: Animate.easeInOut
+            
+        })
+       
+        go_to();
+        fish3Idle();
+        }
     
         </script><canvas width="800" height="600" style="touch-action: none; cursor: inherit;"></canvas>
     
